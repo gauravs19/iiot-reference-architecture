@@ -1,22 +1,61 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
+  <!-- Canonical URL (dynamic per page) -->
+  <link rel="canonical" href="{{ page.canonical_url }}" />
+
   <!-- Open Graph / Social sharing -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://gauravs19.github.io/iiot-reference-architecture/" />
-  <meta property="og:title" content="Industrial IoT Platform Engineering — Reference Architecture" />
-  <meta property="og:description" content="Production-grade reference architecture for industrial IoT: protocols, D2C/C2D contracts, OTA, security, digital twin, fleet management, compliance, and FinOps. 24 sections, real-world patterns." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{ page.canonical_url }}" />
+  <meta property="og:title" content="{{ page.title }} — Industrial IoT Platform Engineering" />
+  <meta property="og:description" content="{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT: protocols, D2C/C2D contracts, OTA, security, digital twin, fleet management, compliance, and FinOps.{% endif %}" />
   <meta property="og:image" content="https://gauravs19.github.io/iiot-reference-architecture/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Industrial IoT Platform Engineering" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="article:author" content="https://www.linkedin.com/in/gauravs19/" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Industrial IoT Platform Engineering — Reference Architecture" />
-  <meta name="twitter:description" content="Production-grade reference architecture for industrial IoT: protocols, OTA, security, digital twin, fleet management and more." />
+  <meta name="twitter:site" content="@gauravs19" />
+  <meta name="twitter:title" content="{{ page.title }} — Industrial IoT Platform Engineering" />
+  <meta name="twitter:description" content="{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT: protocols, OTA, security, digital twin, fleet management and more.{% endif %}" />
   <meta name="twitter:image" content="https://gauravs19.github.io/iiot-reference-architecture/assets/og-image.png" />
 
-  <!-- SEO -->
-  <meta name="description" content="Production-grade reference architecture for industrial IoT systems — covering hardware integration, MQTT, OPC-UA, Modbus, D2C/C2D contracts, OTA, security, digital twin, compliance, and FinOps." />
-  <meta name="keywords" content="industrial IoT, IIoT, MQTT, OPC-UA, Modbus, edge computing, IoT architecture, SCADA, PLC, OTA firmware, IoT security, IEC 62443" />
+  <!-- SEO meta -->
+  <meta name="description" content="{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT — MQTT, OPC-UA, Modbus, D2C/C2D contracts, OTA firmware, IEC 62443 security, digital twin, edge ML, fleet management, compliance, and FinOps.{% endif %}" />
+  <meta name="keywords" content="industrial IoT, IIoT, MQTT, OPC-UA, Modbus, edge computing, IoT architecture, SCADA, PLC, RTU, OTA firmware, IoT security, IEC 62443, ISA-95, digital twin, edge ML, fleet management, device provisioning, time-series database, TimescaleDB, Kafka, EMQX, Azure IoT Hub, AWS IoT Core, Greengrass, FinOps, IIoT reference architecture" />
   <meta name="author" content="Gaurav Sharma" />
-  <link rel="canonical" href="https://gauravs19.github.io/iiot-reference-architecture/" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "{{ page.title }}",
+    "description": "{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT systems.{% endif %}",
+    "url": "{{ page.canonical_url }}",
+    "author": {
+      "@type": "Person",
+      "name": "Gaurav Sharma",
+      "url": "https://www.linkedin.com/in/gauravs19/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Gaurav Sharma",
+      "url": "https://gauravs19.github.io/iiot-reference-architecture/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ page.canonical_url }}"
+    },
+    "isPartOf": {
+      "@type": "TechArticle",
+      "name": "Industrial IoT Platform Engineering — Reference Architecture",
+      "url": "https://gauravs19.github.io/iiot-reference-architecture/"
+    }
+  }
+  </script>
 {% endblock %}
