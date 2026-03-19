@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
-  <!-- Canonical URL (dynamic per page) -->
-  <link rel="canonical" href="{{ page.canonical_url }}" />
+  {% set page_title = page.title ~ " — Industrial IoT Platform Engineering" if page else "Industrial IoT Platform Engineering — Reference Architecture" %}
+  {% set page_url = page.canonical_url if page else "https://gauravs19.github.io/iiot-reference-architecture/" %}
+  {% set page_desc = page.meta.description if page and page.meta and page.meta.description else "Production-grade reference architecture for industrial IoT — MQTT, OPC-UA, Modbus, D2C/C2D contracts, OTA firmware, IEC 62443 security, digital twin, edge ML, fleet management, compliance, and FinOps." %}
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="{{ page_url }}" />
 
   <!-- Open Graph / Social sharing -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="{{ page.canonical_url }}" />
-  <meta property="og:title" content="{{ page.title }} — Industrial IoT Platform Engineering" />
-  <meta property="og:description" content="{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT: protocols, D2C/C2D contracts, OTA, security, digital twin, fleet management, compliance, and FinOps.{% endif %}" />
+  <meta property="og:url" content="{{ page_url }}" />
+  <meta property="og:title" content="{{ page_title }}" />
+  <meta property="og:description" content="{{ page_desc }}" />
   <meta property="og:image" content="https://gauravs19.github.io/iiot-reference-architecture/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -18,13 +22,12 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@gauravs19" />
-  <meta name="twitter:title" content="{{ page.title }} — Industrial IoT Platform Engineering" />
-  <meta name="twitter:description" content="{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT: protocols, OTA, security, digital twin, fleet management and more.{% endif %}" />
+  <meta name="twitter:title" content="{{ page_title }}" />
+  <meta name="twitter:description" content="{{ page_desc }}" />
   <meta name="twitter:image" content="https://gauravs19.github.io/iiot-reference-architecture/assets/og-image.png" />
 
   <!-- SEO meta -->
-  <meta name="description" content="{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT — MQTT, OPC-UA, Modbus, D2C/C2D contracts, OTA firmware, IEC 62443 security, digital twin, edge ML, fleet management, compliance, and FinOps.{% endif %}" />
+  <meta name="description" content="{{ page_desc }}" />
   <meta name="keywords" content="industrial IoT, IIoT, MQTT, OPC-UA, Modbus, edge computing, IoT architecture, SCADA, PLC, RTU, OTA firmware, IoT security, IEC 62443, ISA-95, digital twin, edge ML, fleet management, device provisioning, time-series database, TimescaleDB, Kafka, EMQX, Azure IoT Hub, AWS IoT Core, Greengrass, FinOps, IIoT reference architecture" />
   <meta name="author" content="Gaurav Sharma" />
   <meta name="robots" content="index, follow" />
@@ -34,9 +37,9 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "{{ page.title }}",
-    "description": "{% if page.meta.description %}{{ page.meta.description }}{% else %}Production-grade reference architecture for industrial IoT systems.{% endif %}",
-    "url": "{{ page.canonical_url }}",
+    "headline": "{{ page_title }}",
+    "description": "{{ page_desc }}",
+    "url": "{{ page_url }}",
     "author": {
       "@type": "Person",
       "name": "Gaurav Sharma",
@@ -49,7 +52,7 @@
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "{{ page.canonical_url }}"
+      "@id": "{{ page_url }}"
     },
     "isPartOf": {
       "@type": "TechArticle",
