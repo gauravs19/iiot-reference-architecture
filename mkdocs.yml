@@ -1,0 +1,74 @@
+site_name: Industrial IoT Platform Engineering
+site_description: Reference Architecture for Production-Grade Connected Systems — protocols, contracts, OTA, security, and operations at scale.
+site_author: Gaurav Sharma
+site_url: https://gauravs19.github.io/iiot-reference-architecture/
+
+repo_name: iiot-reference-architecture
+repo_url: https://github.com/gauravs19/iiot-reference-architecture
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.top
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.indexes
+    - navigation.footer
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - search:
+      lang: en
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/gauravs19
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/gaurav-sharma16
+
+copyright: "© 2026 Gaurav Sharma — Industrial IoT Platform Engineering Reference"
