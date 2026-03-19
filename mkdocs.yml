@@ -1,13 +1,15 @@
 site_name: Industrial IoT Platform Engineering
-site_description: Reference Architecture for Production-Grade Connected Systems — protocols, contracts, OTA, security, and operations at scale.
+site_description: Production-grade reference architecture for industrial IoT — protocols, D2C/C2D contracts, OTA, security, digital twin, fleet management, compliance, and FinOps.
 site_author: Gaurav Sharma
 site_url: https://gauravs19.github.io/iiot-reference-architecture/
 
-repo_name: iiot-reference-architecture
+repo_name: gauravs19/iiot-reference-architecture
 repo_url: https://github.com/gauravs19/iiot-reference-architecture
+edit_uri: edit/main/docs/
 
 theme:
   name: material
+  custom_dir: overrides
   palette:
     - scheme: default
       primary: indigo
@@ -25,12 +27,15 @@ theme:
     - navigation.top
     - navigation.tabs
     - navigation.tabs.sticky
-    - navigation.indexes
     - navigation.footer
+    - navigation.indexes
     - search.highlight
     - search.suggest
+    - search.share
     - content.code.copy
     - content.code.annotate
+    - content.action.edit
+    - announce.dismiss
   font:
     text: Inter
     code: JetBrains Mono
@@ -45,6 +50,7 @@ markdown_extensions:
   - toc:
       permalink: true
       toc_depth: 3
+      title: On this page
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -59,16 +65,35 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 plugins:
   - search:
       lang: en
+  - minify:
+      minify_html: true
 
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/gauravs19
+      name: GitHub
     - icon: fontawesome/brands/linkedin
       link: https://linkedin.com/in/gaurav-sharma16
+      name: LinkedIn
+  analytics:
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/thumb-up-outline
+          name: Yes
+          data: 1
+          note: Thanks for the feedback!
+        - icon: material/thumb-down-outline
+          name: No
+          data: 0
+          note: Thanks — we'll keep improving.
 
-copyright: "© 2026 Gaurav Sharma — Industrial IoT Platform Engineering Reference"
+copyright: "© 2026 Gaurav Sharma &nbsp;·&nbsp; <a href='https://github.com/gauravs19/iiot-reference-architecture/blob/main/LICENSE'>MIT License</a>"
