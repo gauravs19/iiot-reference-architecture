@@ -71,6 +71,43 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
+nav:
+  - Home: index.md
+  - Hardware & Protocols:
+    - hardware/index.md
+    - Hardware Devices & Sensors: hardware/hardware.md
+    - Edge Layer & Gateways: hardware/edge.md
+    - Communication Protocols: hardware/protocols.md
+  - Data & Contracts:
+    - data/index.md
+    - Contract Design: data/contracts.md
+    - D2C Data Exchange: data/d2c.md
+    - C2D Commands: data/c2d.md
+    - Device Provisioning: data/provisioning.md
+    - Data Ingestion: data/ingestion.md
+    - Data Modeling: data/modeling.md
+  - Platform Engineering:
+    - platform/index.md
+    - Integration Patterns: platform/integration.md
+    - OTA Firmware Updates: platform/ota.md
+    - Security Architecture: platform/security.md
+    - Observability & Operations: platform/observability.md
+  - Reference Architectures: architectures/index.md
+  - Operations:
+    - operations/index.md
+    - Operational Runbooks: operations/runbooks.md
+    - Digital Twin: operations/digital-twin.md
+    - Edge ML & Inference: operations/edge-ml.md
+    - Fleet Management: operations/fleet.md
+  - Advanced Topics:
+    - advanced/index.md
+    - Multi-Tenant Architecture: advanced/multi-tenant.md
+    - API Design: advanced/api.md
+    - Disaster Recovery: advanced/dr.md
+    - Regulatory Compliance: advanced/compliance.md
+    - Cost Modeling & FinOps: advanced/finops.md
+  - Appendices: appendix/index.md
+
 plugins:
   - search:
       lang: en
