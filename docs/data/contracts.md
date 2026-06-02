@@ -195,7 +195,10 @@ message DataQuality {
    1-15:  most frequently used fields (1-byte encoding)
    16-2047: less frequent
    Never delete a field — mark as reserved
-   Never change a field's type
+   Never change a field's type — if a type change is unavoidable:
+     assign a NEW field number for the new type, mark the old field
+     deprecated = true, support decoding both fields for at least
+     2 firmware release cycles, then reserve the old number and name
    Never change a field's number
 
    Adding enum values: safe (old decoders get UNKNOWN)
@@ -221,6 +224,18 @@ flowchart LR
 
     CT -->|uses| SR[Schema Registry<br/>or contract files in Git]
 ```
+
+!!! warning "additionalProperties: false — tests only, not production"
+    Using `"additionalProperties": false` in schema validation **rejects messages
+    that contain unknown fields**. This is correct in CI tests (catches accidental
+    field renames before they ship) but **must not be used in production ingestion**.
+
+    An old backend receiving messages from newer firmware (which adds fields)
+    would reject every message — breaking forward compatibility.
+
+    Rule of thumb:
+    - **Test validation**: `"additionalProperties": false` — catch renames in CI
+    - **Production validation**: omit the key (or set `true`) — accept extras gracefully
 
 ```python
 # contract_test.py — run in CI for both firmware and backend changes

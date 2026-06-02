@@ -89,8 +89,10 @@ QoS 2 — Exactly Once:
     → Billing / metering data
     → Audit trail records
     → Financial or regulatory compliance telemetry
-  Cost: 4 network round-trips per message
-  At 10,000 msg/s, the overhead is significant — test before committing
+  Cost: 4 network round-trips per message (roughly 2–4× the round trips of QoS 1)
+  At 10,000 msg/s, the overhead is significant but manageable with optimised
+  brokers (EMQX and HiveMQ both handle QoS 2 at this scale in production) —
+  benchmark your specific broker before committing to QoS 2 fleet-wide
   Broker must support QoS 2 fully (not all do — verify your broker)
 ```
 
