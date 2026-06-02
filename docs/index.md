@@ -1,86 +1,135 @@
 # Industrial IoT Platform Engineering
-## Reference Architecture for Production-Grade Connected Systems
 
-**Version:** 2.0
-**Scope:** Platform-agnostic, industrial-grade, production-proven
-**Audience:** Senior engineers and architects designing, integrating, or operating industrial IoT systems at scale
+**Production-grade reference architecture for connected industrial systems**
 
-> **How to use this guide:** Each section is self-contained but builds on prior sections. Jump directly to a section when troubleshooting. Read sequentially when designing from scratch. Every pattern here has been derived from real production failures and hard-won operational experience.
+> Platform-agnostic · Battle-tested · Production-derived · v2.0
 
----
-
-## Table of Contents
-
-1. [IoT Architecture: The Full Stack](#1-iot-architecture-the-full-stack)
-2. [Hardware Layer: Industrial Devices & Sensors](#2-hardware-layer-industrial-devices--sensors)
-3. [Edge Layer: Gateways, Runtimes & Platform Choices](#3-edge-layer-gateways--local-processing)
-4. [Communication Protocols: Deep Dive](#4-communication-protocols-deep-dive)
-5. [Contract Design & Schema Evolution](#5-contract-design--schema-evolution)
-6. [Device-to-Cloud (D2C) Data Exchange](#6-device-to-cloud-d2c-data-exchange)
-7. [Cloud-to-Device (C2D) Command Exchange](#7-cloud-to-device-c2d-command-exchange)
-8. [Device Provisioning & Identity](#8-device-provisioning--identity)
-9. [Data Ingestion Pipelines](#9-data-ingestion-pipelines)
-10. [Data Modeling for IoT](#10-data-modeling-for-iot)
-11. [Integration Patterns](#11-integration-patterns)
-12. [OTA Firmware Updates: End-to-End](#12-ota-firmware-updates-end-to-end)
-13. [Security Architecture](#13-security-architecture)
-14. [Observability & Operations](#14-observability--operations)
-15. [Reference Architectures](#15-reference-architectures)
-16. [Operational Runbooks](#16-operational-runbooks)
-17. [Digital Twin & Asset Modeling](#17-digital-twin--asset-modeling)
-18. [Edge ML & Inference](#18-edge-ml--inference)
-19. [Fleet Management at Scale](#19-fleet-management-at-scale)
-20. [Multi-Site & Multi-Tenant Architecture](#20-multi-site--multi-tenant-architecture)
-21. [API Design & Developer Experience](#21-api-design--developer-experience)
-22. [Disaster Recovery & Business Continuity](#22-disaster-recovery--business-continuity)
-23. [Regulatory Compliance](#23-regulatory-compliance)
-24. [Cost Modeling & FinOps](#24-cost-modeling--finops)
-
-**Appendices:**
-- [A: Protocol Quick Reference](#appendix-a-protocol-quick-reference)
-- [B: OPC-UA Quality Codes](#appendix-b-opc-ua-quality-codes-reference)
-- [C: Schema Compatibility Matrix](#appendix-c-schema-version-compatibility-matrix)
-- [D: Extension Roadmap](#appendix-d-whats-missing--extension-roadmap)
+Every pattern in this guide has been derived from real deployments across factory floors, oil & gas sites, water utilities, and logistics networks — not from vendor documentation.
 
 ---
 
-## Preface: Why Industrial IoT Is Hard
+## What's Covered
 
-Before diving into protocols and schemas, it is worth grounding this in business reality. Industrial IoT sits at the intersection of two worlds that were never designed to work together — and the gap between them is where most projects stall.
+<div class="grid cards" markdown>
 
-### Key Industries & Domains
+-   :material-cpu-64-bit:{ .lg .middle } **Hardware & Protocols**
+
+    ---
+    PLCs, RTUs, smart sensors, edge gateways, and the full protocol stack —
+    Modbus, OPC-UA, MQTT, LoRaWAN, PROFINET, EtherCAT.
+
+    [:octicons-arrow-right-24: Hardware & Protocols](hardware/)
+
+-   :material-swap-horizontal:{ .lg .middle } **Data & Contracts**
+
+    ---
+    Schema versioning, D2C telemetry, C2D commands, device provisioning
+    (PKI / X.509), ingestion pipelines, and TimescaleDB modeling.
+
+    [:octicons-arrow-right-24: Data & Contracts](data/)
+
+-   :material-cog-outline:{ .lg .middle } **Platform Engineering**
+
+    ---
+    Unified Namespace, OTA firmware, IEC 62443 security zones, observability
+    with the four IoT golden signals.
+
+    [:octicons-arrow-right-24: Platform Engineering](platform/)
+
+-   :material-sitemap:{ .lg .middle } **Reference Architectures**
+
+    ---
+    Eight production-ready patterns: greenfield, brownfield, remote assets,
+    predictive maintenance, smart building, fleet, water utility, SaaS.
+
+    [:octicons-arrow-right-24: Reference Architectures](architectures/)
+
+-   :material-wrench-outline:{ .lg .middle } **Operations**
+
+    ---
+    Day-2 runbooks, digital twin & ISA-95 asset hierarchy, edge ML deployment,
+    and fleet management at scale.
+
+    [:octicons-arrow-right-24: Operations](operations/)
+
+-   :material-shield-check-outline:{ .lg .middle } **Advanced Topics**
+
+    ---
+    Multi-tenancy, disaster recovery with failback, regulatory compliance
+    (IEC 62443 · FDA 21 CFR 11 · NERC CIP · ISO 27001 · SOC 2), and FinOps.
+
+    [:octicons-arrow-right-24: Advanced Topics](advanced/)
+
+</div>
+
+---
+
+## How to Use This Guide
+
+!!! tip "Jump in anywhere"
+    Each section is self-contained but builds on prior sections.
+
+    - **Designing from scratch?** Read sequentially, starting with Hardware.
+    - **Troubleshooting a specific issue?** Jump directly to the relevant section or runbook.
+    - **Evaluating a decision?** Use the reference architectures and decision trees.
+
+---
+
+## Industries & Domains
 
 | Industry | Primary IoT Use Cases | Scale | Dominant Protocols |
 |---|---|---|---|
-| **Discrete Manufacturing** | OEE monitoring, predictive maintenance, quality traceability | 100s–10,000s of devices per plant | OPC-UA, EtherNet/IP, PROFINET |
-| **Process / Chemicals** | Process optimization, emissions monitoring, safety compliance | 1,000s of sensors per site | HART, FOUNDATION Fieldbus, OPC-UA |
+| **Discrete Manufacturing** | OEE monitoring, predictive maintenance, quality traceability | 100s–10,000s devices/plant | OPC-UA, EtherNet/IP, PROFINET |
+| **Process / Chemicals** | Process optimisation, emissions monitoring, safety compliance | 1,000s of sensors/site | HART, FOUNDATION Fieldbus, OPC-UA |
 | **Oil & Gas** | Pipeline integrity, well monitoring, tank gauging, HSE | Remote, solar-powered, low bandwidth | Modbus, DNP3, LoRaWAN, Satellite |
-| **Utilities (Power/Water)** | SCADA modernization, demand response, outage detection | Grid-scale, millions of endpoints | DNP3, IEC 60870-5, IEC 61968 |
+| **Utilities (Power/Water)** | SCADA modernisation, demand response, outage detection | Grid-scale, millions of endpoints | DNP3, IEC 60870-5, IEC 61968 |
 | **Pharma / Life Sciences** | Environmental monitoring, batch traceability, cold chain | Strict compliance (21 CFR Part 11) | OPC-UA, Modbus, ISA-88 |
 | **Smart Buildings / HVAC** | Energy management, occupancy, predictive maintenance | 100s–1,000s per building | BACnet, Modbus, Zigbee, KNX |
 | **Logistics / Cold Chain** | Asset tracking, temperature monitoring, dock management | Mobile, GPS-dependent | BLE, LoRaWAN, LTE-M, MQTT |
-| **Mining** | Equipment health, ventilation, blasting control | Harsh, underground, intermittent | Modbus, PROFIBUS, LTE private networks |
+| **Mining** | Equipment health, ventilation, blasting control | Harsh, underground, intermittent | Modbus, PROFIBUS, private LTE |
 
-### Key Business Challenges Teams Actually Face
+---
 
-Understanding the business pain behind the technology prevents over-engineering and misaligned priorities.
+## Why Industrial IoT Is Hard
 
-**The OT/IT culture gap is the #1 project killer.**
-OT teams (plant engineers, process engineers) have operated independently for decades. They are rightly cautious about any change to systems that control physical processes. IT teams move fast and break things — a philosophy that will result in actual broken things in an industrial environment. Successful projects establish clear ownership boundaries early: OT owns the control layer; IT/cloud owns the data layer. The edge gateway is the demilitarized zone between them.
+Before diving into protocols and schemas, it is worth grounding this in business reality. Industrial IoT sits at the intersection of two worlds that were never designed to work together — and the gap between them is where most projects stall.
 
-**Legacy equipment does not disappear.**
-A plant built in 1995 has PLCs from 1995. A refinery has instruments that predate the internet. Budget decisions rarely allow full hardware replacement. Any IoT platform that cannot integrate with Modbus, PROFIBUS, and HART from day one will fail to get traction. The real world is brownfield, not greenfield.
+!!! danger "The OT/IT culture gap is the #1 project killer"
+    OT teams (plant engineers, process engineers) have operated independently for decades.
+    They are rightly cautious about any change to systems that control physical processes.
+    IT teams move fast and break things — a philosophy that will cause actual broken things
+    in an industrial environment.
 
-**Data quality, not data volume, is the actual problem.**
-Most teams start by thinking "how do we get more data to the cloud?" The harder question is "how do we know the data is correct?" A temperature sensor with a failed heater tracing reads 18°C in a process that should be at 80°C. Without quality codes, alarm management, and sensor health monitoring, dashboards display wrong numbers with high confidence.
+    Successful projects establish clear ownership boundaries early:
+    **OT owns the control layer; IT/cloud owns the data layer.**
+    The edge gateway is the demilitarised zone between them.
 
-**Compliance and safety are non-negotiable constraints.**
-IoT projects in regulated industries (pharma, nuclear, oil & gas) must satisfy auditors, not just engineers. Data integrity, audit trails, access control, and change management are not optional features — they are launch blockers. Build them in from the start.
+!!! warning "Legacy equipment does not disappear"
+    A plant built in 1995 has PLCs from 1995. A refinery has instruments that predate
+    the internet. Budget decisions rarely allow full hardware replacement. Any IoT platform
+    that cannot integrate with Modbus, PROFIBUS, and HART from day one will fail to get
+    traction. **The real world is brownfield, not greenfield.**
 
-**The total cost of operations is underestimated.**
-A pilot with 50 devices looks easy. A production deployment with 5,000 devices across 10 sites creates: firmware version sprawl, certificate expiry incidents, connectivity monitoring, per-device configuration drift, and remote troubleshooting workflows. OTA, observability, and fleet management are not nice-to-haves — they are what separates a pilot from a product.
+!!! note "Data quality, not data volume, is the actual problem"
+    Most teams start by thinking "how do we get more data to the cloud?" The harder question
+    is "how do we know the data is correct?" A temperature sensor with a failed heater tracing
+    reads 18°C in a process that should be at 80°C. Without quality codes, alarm management,
+    and sensor health monitoring, dashboards display wrong numbers with high confidence.
 
-### Typical Team Structure & Ownership
+!!! info "Compliance and safety are non-negotiable constraints"
+    IoT projects in regulated industries (pharma, nuclear, oil & gas) must satisfy auditors,
+    not just engineers. Data integrity, audit trails, access control, and change management
+    are not optional features — they are launch blockers. Build them in from the start.
+
+!!! abstract "The total cost of operations is underestimated"
+    A pilot with 50 devices looks easy. A production deployment with 5,000 devices across
+    10 sites creates firmware version sprawl, certificate expiry incidents, connectivity
+    monitoring, per-device configuration drift, and remote troubleshooting workflows.
+    OTA, observability, and fleet management are what separates a pilot from a product.
+
+---
+
+## Typical Team Structure & Ownership
 
 ```mermaid
 graph LR
@@ -117,9 +166,9 @@ graph LR
 
 ---
 
-## IoT Architecture: The Full Stack
+## The Full Stack
 
-Industrial IoT systems span five distinct layers. Each has its own failure modes, latency requirements, and operational concerns. Never conflate them — the most common architectural mistakes come from blurring these boundaries.
+Industrial IoT systems span five distinct layers. Each has its own failure modes, latency requirements, and operational concerns. **Never conflate them** — the most common architectural mistakes come from blurring these boundaries.
 
 ```mermaid
 graph LR
@@ -165,24 +214,27 @@ graph LR
     L4 <-->|APIs / events| L5
 ```
 
-### 1.1 Why Layer Separation Matters in Production
+### Why Layer Separation Matters in Production
 
-In a real factory deployment a critical lesson repeats itself: teams collapse Layer 3 (edge) and Layer 4 (cloud) into a single "IoT platform" and then discover that:
-- The factory loses internet for 4 hours and all sensor data is gone — because there was no store-and-forward at the edge
-- A cloud rule engine fires a command to a PLC 800ms after the sensor condition, but the PLC scan cycle is 10ms — the response came 80 cycles too late
+In real factory deployments a critical lesson repeats itself: teams collapse the edge layer and cloud layer into a single "IoT platform" and then discover that:
+
+- The factory loses internet for 4 hours and all sensor data disappears — because there was no store-and-forward at the edge
+- A cloud rule engine fires a command to a PLC 800 ms after the sensor condition, but the PLC scan cycle is 10 ms — the response arrived 80 cycles too late
 - A firmware bug in the gateway bricks 200 devices simultaneously because there was no staged rollout
 
 **The layers are not just logical — they map to physical failure domains, ownership boundaries, and latency contracts.**
 
-### 1.2 Key Architectural Tensions
+### Key Architectural Tensions
 
 | Tension | Industrial Default | Naive Default | Why It Matters |
 |---|---|---|---|
 | Latency vs. throughput | Low latency at edge, batch at cloud | Everything to cloud first | Control loops cannot tolerate cloud round-trips |
-| Online vs. offline | Must work fully offline | Always-connected assumption | Factory floors lose connectivity — plan for 72h outages |
-| Open vs. proprietary | Both coexist permanently | Standardize everything | Modbus from 1979 is still on your factory floor |
+| Online vs. offline | Must work fully offline | Always-connected assumption | Factory floors lose connectivity — plan for 72 h outages |
+| Open vs. proprietary | Both coexist permanently | Standardise everything | Modbus from 1979 is still on your factory floor |
 | Push vs. poll | Event-driven push | Polling everything | Polling at scale kills network and battery |
 | Schema flexibility vs. contract | Strict contracts + versioning | Schema-on-read / loose JSON | Loose schemas cause silent data corruption at scale |
-| Edge compute vs. cloud compute | Edge for latency, cloud for analytics | Cloud for everything | Edge ML inference is real; round-trip for classification is not |
+| Edge compute vs. cloud compute | Edge for latency, cloud for analytics | Cloud for everything | Edge ML inference is real — cloud round-trips for classification are not |
 
 ---
+
+*Audience: senior engineers and architects designing, integrating, or operating industrial IoT systems at scale.*
