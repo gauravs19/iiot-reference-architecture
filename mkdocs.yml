@@ -90,7 +90,9 @@ nav:
     - OTA Firmware Updates: platform/ota.md
     - Security Architecture: platform/security.md
     - Observability & Operations: platform/observability.md
-  - Reference Architectures: architectures/index.md
+  - Reference Architectures:
+    - architectures/index.md
+    - Platform C4 Model & ADR: architectures/platform-c4-model.md
   - Operations:
     - operations/index.md
     - Operational Runbooks: operations/runbooks.md
